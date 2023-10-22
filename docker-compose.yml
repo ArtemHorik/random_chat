@@ -1,0 +1,28 @@
+volumes:
+  cache:
+    driver: local
+  caddy_data:
+    driver: local
+
+services:
+  bot:
+    build: ./bot
+    env_file:
+      - .env
+    restart: "no"
+    depends_on:
+      - redis
+#      - caddy
+
+    expose:
+      - 8000
+
+  redis:
+    image: redis:alpine
+    restart: "on-failure"
+    env_file:
+      - .env
+    expose:
+      - 6379
+    volumes:
+      - cache:/data
